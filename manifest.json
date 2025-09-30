@@ -1,6 +1,6 @@
 {
   "name": "Gewinn-Rechner",
-  "short_name": "Gewinn",
+  "short_name": "Krypto-Rechner",
   "start_url": "/kryptoberechner/",
   "scope": "/kryptoberechner/",
   "display": "standalone",

@@ -1,7 +1,7 @@
 {
   "name": "Gewinn-Rechner",
   "short_name": "Gewinn",
-  "start_url": ".",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#fafafe",
   "theme_color": "#157be8",

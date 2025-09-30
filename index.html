@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Einfacher Gewinn-Rechner</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding:2em; max-width:410px; margin:auto; background:#fafafe;}
+    .feld { margin-bottom:1.2em;}
+    label { font-size:1.1em; display:block; margin-bottom:0.4em;}
+    input { width:100%; padding:0.6em; font-size:1.2em; box-sizing:border-box; border-radius:5px; border:1px solid #ccc; background:#fff;}
+    input:focus { outline:2px solid #bddaf6; border-color:#7dbef5;}
+    button { padding:0.7em 2.5em; font-size:1.1em; margin-top:1em; border-radius:5px; background:#157be8; color:#fff; border:none;}
+    button:active {background:#0a57ab;}
+    .result { margin-top:2em; font-size:1.25em; background:#f2fbf7; padding:1.2em; border-radius:0.7em; text-align:center; }
+    .wert { font-size:1.35em; font-weight:bold; margin:0.1em 0 0.35em 0;}
+    .caption { font-size:0.99em; color:gray;}
+  </style>
+</head>
+<body>
+  <h2>Einfacher Gewinn-Rechner</h2>
+  <div class="feld">
+    <label for="einsatz">Wie viel hast du investiert?</label>
+    <input id="einsatz" type="text" inputmode="decimal" placeholder="z.B. 1234,50" oninput="cleanInput(this)">
+  </div>
+  <div class="feld">
+    <label for="einstieg">Kaufpreis pro Einheit (€):</label>
+    <input id="einstieg" type="text" inputmode="decimal" placeholder="z.B. 21500,75" oninput="cleanInput(this)">
+  </div>
+  <div class="feld">
+    <label for="ausstieg">Verkaufspreis pro Einheit (€):</label>
+    <input id="ausstieg" type="text" inputmode="decimal" placeholder="z.B. 42000,75" oninput="cleanInput(this)">
+  </div>
+  <button onclick="rechnen()">Berechnen</button>
+  <div id="result" class="result"></div>
+
+<script>
+function cleanInput(field) {
+  // Cursor-Position merken
+  const cursorPos = field.selectionStart;
+  const oldValue = field.value;
+  
+  // Nur Ziffern, Punkt, Komma zulassen
+  let val = field.value.replace(/[^0-9.,]/g, '');
+  
+  // Punkte (Tausender) entfernen, aber Kommas behalten
+  let withoutThousands = val.replace(/\./g, '');
+  
+  // Nur ein Komma erlauben
+  let parts = withoutThousands.split(',');
+  let integer = parts[0] || '';
+  let decimal = parts[1] || '';
+  
+  // Dezimalstellen auf 2 begrenzen
+  if (decimal.length > 2) {
+    decimal = decimal.slice(0, 2);
+  }
+  
+  // Tausender-Punkte in Ganzzahl einfügen
+  if (integer) {
+    integer = integer.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  }
+  
+  // Zusammensetzen
+  let formatted = integer;
+  if (parts.length > 1) {
+    formatted += ',' + decimal;
+  }
+  
+  field.value = formatted;
+  
+  // Cursor-Position anpassen
+  const lengthDiff = formatted.length - oldValue.length;
+  const newPos = Math.max(0, Math.min(cursorPos + lengthDiff, formatted.length));
+  field.setSelectionRange(newPos, newPos);
+}
+
+function readNumberField(str) {
+  if(!str) return NaN;
+  return parseFloat(str.replace(/\./g,'').replace(',','.')); // 1.234,56 -> 1234.56
+}
+
+function euroFormat(betrag) {
+  return Number(betrag).toLocaleString('de-DE',{minimumFractionDigits:2, maximumFractionDigits:2}) + ' €';
+}
+
+function rechnen() {
+  const einsatz = readNumberField(document.getElementById('einsatz').value);
+  const einstieg = readNumberField(document.getElementById('einstieg').value);
+  const ausstieg = readNumberField(document.getElementById('ausstieg').value);
+
+  if(isNaN(einsatz) || isNaN(einstieg) || isNaN(ausstieg) || einsatz<=0 || einstieg<=0 || ausstieg<=0) {
+    document.getElementById('result').innerHTML = "<span style='color:red'>Bitte alle Felder sinnvoll ausfüllen.</span>";
+    return;
+  }
+
+  const menge = einsatz / einstieg;
+  const verkaufserloes = menge * ausstieg;
+  const gewinn = verkaufserloes - einsatz;
+  const prozent = (gewinn / einsatz) * 100;
+  const faktor = verkaufserloes / einsatz;
+
+  document.getElementById('result').innerHTML = `
+    <div class="caption">Gewinn:</div>
+    <div class="wert" style="color:${gewinn>=0?'#0ab26b':'#d0212b'}">${euroFormat(gewinn)}</div>
+    <div class="caption">Endwert deiner Investition:</div>
+    <div class="wert">${euroFormat(verkaufserloes)}</div>
+    <div style="margin:1em 0 0 0; font-size:1.08em;">
+      <b>${prozent.toFixed(2)} % Gewinn</b><br>
+      <span style="font-size:1.05em;">${faktor.toFixed(2)}x</span>
+    </div>
+  `;
+}
+</script>
+</body>
+</html>

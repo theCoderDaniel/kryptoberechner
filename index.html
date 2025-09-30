@@ -24,15 +24,15 @@
 <body>
   <h2>Einfacher Gewinn-Rechner</h2>
   <div class="feld">
-    <label for="einsatz">Wie viel hast du investiert?</label>
-    <input id="einsatz" type="text" inputmode="decimal" placeholder="z.B. 1234,50" oninput="cleanInput(this)">
+    <label for="einsatz">Investitionsbetrag (in €)</label>
+    <input id="einsatz" type="text" inputmode="decimal" placeholder="z.B. 100" oninput="cleanInput(this)">
   </div>
   <div class="feld">
-    <label for="einstieg">Kaufpreis pro Einheit (€):</label>
+    <label for="einstieg">Kaufpreis pro Coin (€):</label>
     <input id="einstieg" type="text" inputmode="decimal" placeholder="z.B. 21500,75" oninput="cleanInput(this)">
   </div>
   <div class="feld">
-    <label for="ausstieg">Verkaufspreis pro Einheit (€):</label>
+    <label for="ausstieg">Verkaufspreis pro Coin (€):</label>
     <input id="ausstieg" type="text" inputmode="decimal" placeholder="z.B. 42000,75" oninput="cleanInput(this)">
   </div>
   <button onclick="rechnen()">Berechnen</button>
@@ -119,4 +119,5 @@ function rechnen() {
 </body>
 
 </html>
+
 

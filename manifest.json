@@ -1,7 +1,8 @@
 {
-  "name": "Gewinn-Rechner",
-  "short_name": "Gewinn",
-  "start_url": "/",
+  "name": "Krypto-Rechner",
+  "short_name": "Krypto Rechner",
+  "start_url": "/kryptoberechner/",
+  "scope": "/kryptoberechner/",
   "display": "standalone",
   "background_color": "#fafafe",
   "theme_color": "#157be8",
